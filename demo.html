@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="Index/main.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="Index/scripts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700,900" rel="stylesheet">
+    
+    <head>
+        <style>
+            
+            body {
+                margin: 0;
+                overflow: hidden;
+            }
+            
+            .nav-wrapper {
+                background-color: rgba(0,0,0,0.2);
+                height: 10vh;
+                position: fixed;
+                width: 100vw;
+                line-height: 10vh;
+                z-index: 10;
+                transition: background 0.2s;
+            }
+            
+            .nav-wrapper .brand-logo {
+                filter: brightness(1000%);
+                height: 8vh;
+                margin-top: 1vh;
+                margin-left: 2vw;
+            }
+            
+            .nav-wrapper li {
+                display: inline-block;
+                margin-left: 1vw;
+                margin-right: 1vw;
+                padding-left: 2vw;
+                padding-right: 2vw;
+                border-radius: 3600px;
+                transition: background 0.2s;
+                transition: border 0.2s;
+                cursor: pointer;
+            }
+            
+            .nav-wrapper li a i {
+                vertical-align: middle;
+            }
+            
+            
+            .nav-wrapper a {
+                color: #FFF;
+                font-size: 16px;
+            }
+            
+            .nav-wrapper ul {
+                line-height: 5vh;
+            }
+            
+            #map {
+                height: 100vh;
+                width: 100vw;
+            }
+            
+            #legend {
+                width: 20vw;
+                height: 50vh;
+                position: absolute;
+                top: 30vh;
+                right: 4vw;
+                background-color: #FFF;
+                border-radius: 2px;
+                z-index: 100;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                padding: 3vw;
+            }
+            
+            #legend h1 {
+                margin: auto;
+                font-size: 24px;
+                color: #666;                
+            }
+            
+            .content {
+            width: 400px;
+            height: 200px;
+            margin: 0;
+            padding: 20px;
+        }
+        
+            .content .header {
+            width: 100%;
+            height: 50px;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .content .header .event, .content .header .ehr, .content .header .toolkit, .content .header .radiology  {
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            }
+            
+            .content .header .event {
+                color: #CC0000;
+            }
+            
+            .content .header .ehr {
+                color: #219653;
+            }
+            
+            .content .header .toolkit {
+                color: #F2994A;
+            }
+            
+            .content .header .radiology {
+                color: #2F80ED;
+            }
+            
+            .content .header .name {
+                font-size: 18px;
+                color: #666;
+            }
+            
+            .content .header .version {
+                font-size: 12px;
+                color: #666;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="nav-wrapper">
+            <a href="index.html"><img src="logo.png" class="brand-logo"></a>
+            <ul id="nav-mobile" class="right hide-on-small-only">
+                <li class="menu_items_li" onclick="toggleLegend()"><a class="menu_items tooltipped" data-position="bottom" data-delay="50" data-tooltip="View legend"><i class="material-icons">info</i></a></li>
+                <li class="menu_items_li"><a class="menu_items tooltipped" data-position="bottom" data-delay="50" data-tooltip="Help"><i class="material-icons">help</i></a></li>
+                <li class="menu_items_li"><a class="menu_items tooltipped" data-position="bottom" data-delay="50" data-tooltip="Home"><i class="material-icons">home</i></a></li>
+            </ul>
+        </div>
+        
+        <div id="legend">
+            <h1>Legend</h1>
+            <p><img src="ehr.png">&nbsp;LibreHealth EHR</p>
+            <p><img src="toolkit.png">&nbsp;LibreHealth Toolkit</p>
+            <p><img src="radiology.png">&nbsp;LibreHealth Radiology</p>
+            <p><img src="event.png">&nbsp;Events</p>
+        </div>
+        <div id="map"></div>
+        <script>
+            
+            var listOfMarkers = JSON.parse('[{"type":"event", "name":"Ebola Outbreak", "location":"Nigeria", "coords":{"lat": -25.363, "lng": 131.044}},{"type":"ehr", "name":"John Doe", "location":"USA", "coords":{"lat": -22.363, "lng": 111.044}, "version":"1.2","contactDetails":"john@doe.com"},{"type":"toolkit", "name":"EME Clinic", "location":"Australia", "coords":{"lat": -22.363, "lng": 121.044}, "version":"1.1", "contactDetails":"eme.clinic.com"},{"type":"radiology", "name":"EDSRE Hospitals", "location":"Australia", "coords":{"lat": -20.363, "lng": 111.044}, "version":"1.5", "contactDetails":"edsre.com"}]');
+            function initMap() {
+                var lightMap = new google.maps.StyledMapType(
+            [
+  {
+    "featureType": "administrative.neighborhood",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  }
+],
+            {name: 'Light Map'});
+                
+                var darkMap = new google.maps.StyledMapType(
+            [
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#1d2c4d"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#8ec3b9"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#1a3646"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.country",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#4b6878"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#64779e"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.neighborhood",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.province",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#4b6878"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.man_made",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#334e87"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#023e58"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#283d6a"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#6f9ba5"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#1d2c4d"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#023e58"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#3C7680"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#304a7d"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#98a5be"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#1d2c4d"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#2c6675"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#255763"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#b0d5ce"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#023e58"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#98a5be"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#1d2c4d"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#283d6a"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#3a4762"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#0e1626"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#4e6d70"
+      }
+    ]
+  }
+],
+            {name: 'Dark Map'});
+
+        // Create a map object, and include the MapTypeId to add
+        // to the map type control.
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -25.363, lng: 131.044},
+          zoom: 3,
+          mapTypeControlOptions: {
+            mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+                    'styled_map']
+          },
+            mapTypeControl: false,
+          mapTypeControlOptions: {
+              style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+              position: google.maps.ControlPosition.TOP_CENTER
+          },
+          zoomControl: true,
+          zoomControlOptions: {
+              position: google.maps.ControlPosition.LEFT_BOTTOM
+          },
+          scaleControl: true,
+          streetViewControl: true,
+          streetViewControlOptions: {
+              position: google.maps.ControlPosition.LEFT_TOP
+          },
+          fullscreenControl: false,
+            streetViewControl: false,
+        });
+                
+            
+                for(var i=0;i<Object.keys(listOfMarkers).length;i++) {
+                    var markerIcon;
+                    if(listOfMarkers[i].type == "ehr") {
+                        markerIcon = "ehr.png";
+                        var popup = 
+                            '<div class="content">'+
+                            '<div class="header">'+
+                            '<h1 class="ehr">EHR User</h1>'+
+                            '<p class="name">' + listOfMarkers[i].name + '</p>'+
+                            '<p class="version">Version ' + listOfMarkers[i].version + '</p>'+
+                            '<p class="location">' + listOfMarkers[i].location + '</p>'+
+                            '<p class="contact">Contact at: ' + listOfMarkers[i].contactDetails + '</p>'+
+                            '</div>'+
+                            '</div>';
+                    } else if (listOfMarkers[i].type == "toolkit") {
+                        markerIcon = "toolkit.png";
+                        var popup = 
+                            '<div class="content">'+
+                            '<div class="header">'+
+                            '<h1 class="toolkit">Toolkit User</h1>'+
+                            '<p class="name">' + listOfMarkers[i].name + '</p>'+
+                            '<p class="version">Version ' + listOfMarkers[i].version + '</p>'+
+                            '<p class="location">' + listOfMarkers[i].location + '</p>'+
+                            '<p class="contact">Contact at: ' + listOfMarkers[i].contactDetails + '</p>'+
+                            '</div>'+
+                            '</div>';
+                        
+                    } else if (listOfMarkers[i].type == "radiology") {
+                        markerIcon = "radiology.png";
+                        var popup = 
+                            '<div class="content">'+
+                            '<div class="header">'+
+                            '<h1 class="radiology">Radiology User</h1>'+
+                            '<p class="name">' + listOfMarkers[i].name + '</p>'+
+                            '<p class="version">Version ' + listOfMarkers[i].version + '</p>'+
+                            '<p class="location">' + listOfMarkers[i].location + '</p>'+
+                            '<p class="contact">Contact at: ' + listOfMarkers[i].contactDetails + '</p>'+
+                            '</div>'+
+                            '</div>';
+                    } else if (listOfMarkers[i].type == "event") {
+                        markerIcon = "event.png";
+                        var popup = 
+                            '<div class="content">'+
+                            '<div class="header">'+
+                            '<h1 class="event">Event</h1>'+
+                            '<p class="name">' + listOfMarkers[i].name + '</p>'+
+                            '<p class="location">' + listOfMarkers[i].location + '</p>'+
+                            '</div>'+
+                            '</div>';
+                    }
+                    var cmd = "var marker"+i+" = new google.maps.Marker({"+
+                   "     position: listOfMarkers[i].coords,"+
+                   "     map: map,"+
+                   "     title: listOfMarkers[i].title,"+
+                   "     icon: markerIcon"+
+                   " });"+
+                    
+                   " marker"+i+".addListener('click', function() {"+
+                   "     infowindow"+i+".open(map, marker"+i+");"+
+                   " });"+
+                   " "+
+                   " var infowindow"+i+" = new google.maps.InfoWindow({"+
+                   "     content: popup"+
+                   " });";
+                    
+                    eval(cmd);
+                    
+                    
+                }
+                 //Associate the styled map with the MapTypeId and set it to display.
+                
+                var date = new Date();
+                if(date.getHours() > 19) {
+                    map.mapTypes.set('styled_map', darkMap);
+                } else {
+                    map.mapTypes.set('styled_map', lightMap);
+                }
+                
+                map.setMapTypeId('styled_map');
+            }
+        
+
+           
+                
+                
+        </script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtWx6OHj2oMjdktQr8RZgkT5znkwziASM&callback=initMap">
+        </script>
+        
+        <script>
+            var legendVisible = false;
+            function toggleLegend() {
+                if(legendVisible) {
+                    document.getElementById("legend").style.display = "none";
+                    legendVisible = false;
+                } else {
+                    document.getElementById("legend").style.display = "block";
+                    legendVisible = true;
+                }
+            }
+        </script>
+    </body>
+</html>
