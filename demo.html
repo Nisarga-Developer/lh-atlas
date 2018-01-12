@@ -682,7 +682,7 @@
             streetViewControl: false,
         });
                 
-            
+            var currentOpenInfoBox;
                 firebase.database().ref('lh-atlas').once('value').then(function(snapshot) {
                 snapshot.forEach(function(marker) {                    
                     var markerIcon, i=0;
@@ -746,6 +746,8 @@
                     
                    " marker"+i+".addListener('click', function() {"+
                    "     infowindow"+i+".open(map, marker"+i+");"+
+                   "     if(currentOpenInfoBox!=undefined)currentOpenInfoBox.close();"+
+                   "     currentOpenInfoBox = infowindow"+i+";"+
                    " });"+
                    " "+
                    " var infowindow"+i+" = new google.maps.InfoWindow({"+
