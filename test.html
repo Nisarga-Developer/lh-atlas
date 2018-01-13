@@ -25,11 +25,14 @@
                        
                        id="atlas-control"
                        ></atlas-control>
-        
+        <a onclick="cr">NEW</a>
         <script>
-            var i = document.getElementById("atlas-control").loginUser();
-            alert(i);
-            document.getElementById("atlas-control").addToolkitUserMarker();
+            document.getElementById("atlas-control").loginUser();
+            
+            function cr(){
+                document.getElementById("atlas-control").addToolkitUserMarker();
+            }
+            
         </script>
     </body>
 </html>
