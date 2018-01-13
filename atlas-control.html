@@ -31,6 +31,10 @@
     
       static get properties() {
         return {
+            loggedIn: {
+                type: Number,
+                value: 0
+            },
             user: {
                 type: String,
                 value: "def",
@@ -80,10 +84,6 @@
                 type: String,
                 value: "def",
                 reflectToAttribute: true
-            },
-            loggedIn: {
-                type: Number,
-                value: 0
             }
         }
       }
