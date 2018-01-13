@@ -24,17 +24,13 @@
   </template>
 
   <script>
-    class PatientDemographics extends Polymer.Element {
+    class AtlasControl extends Polymer.Element {
       static get is() {
           return 'atlas-control';
       }
     
       static get properties() {
         return {
-            loggedIn: {
-                type: Number,
-                value: 0
-            },
             user: {
                 type: String,
                 value: "def",
@@ -84,33 +80,35 @@
                 type: String,
                 value: "def",
                 reflectToAttribute: true
+            },
+            
+            loggedIn: {
+                type: Boolean,
+                value: false
             }
-        },
-            loginUser: function() {
-               firebase.auth().signInWithEmailAndPassword(this.user,this.pass).catch(function(error) {
+        }
+      }
+      constructor() {
+        super();
+      }
+        
+        
+        loginUser() {
+            firebase.auth().signInWithEmailAndPassword(this.user,this.pass).catch(function(error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(errorCode);
                 console.log(errorMessage);
                 console.log("Failed to log in to atlas db");
             }).then(function(){
-                console.log(this.email);
-                console.log(this.title);
-                this.loggedIn = 1;
+                this.loggedIn = true;
                 console.log("Logged in to atlas db");
                 console.log(this.loggedIn);
                 console.log(this.title);
                 console.log(this.version);
                 console.log(this.email);
-            }); 
-            }
-      }
-    }
-      constructor() {
-        super();
-      }
-        
-        
+            });
+        }
         
         addToolkitUserMarker() {
             createMarker("toolkit");
@@ -156,11 +154,7 @@
       
     }
       
-    customElements.define(PatientDemographics.is, PatientDemographics);
+    customElements.define(AtlasControl.is, AtlasControl);
   </script>
     
-    <script>
-        
-    </script>
-
 </dom-module>
