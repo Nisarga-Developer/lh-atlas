@@ -16,6 +16,18 @@
                 messagingSenderId: "492740598517"
             };
             firebase.initializeApp(config);
+            
+            var title, location, latitude, longitude, email, phone, version, encounters;
+        
+        function varUpdater(titleF, locationF, latitudeF, longitudeF, emailF, phoneF, versionF, encountersF) {
+            title = titleF;
+            location = locationF;
+            latitude = latitudeF;
+            email = emailF;
+            phone = phoneF;
+            version = versionF;
+            encounters = encountersF;
+        }
       </script>
 
   <template>
@@ -110,17 +122,7 @@
     
     <script>
         var loggedIn = false;
-        var title, location, latitude, longitude, email, phone, version, encounters;
         
-        function varUpdater(titleF, locationF, latitudeF, longitudeF, emailF, phoneF, versionF, encountersF) {
-            title = titleF;
-            location = locationF;
-            latitude = latitudeF;
-            email = emailF;
-            phone = phoneF;
-            version = versionF;
-            encounters = encountersF;
-        }
         
         function loginUserWithCredentials(user,pass) {
             firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error) {
