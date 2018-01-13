@@ -39,7 +39,7 @@
                 type: String,
                 observer: "valChanged"
             },
-            markerName: {
+            title: {
                 type: String,
                 observer: "valChanged"
             },
@@ -78,36 +78,32 @@
       }
         
         
-        var name, location, latitude, longitude, email, phone, version, encounters;
+        
         loginUser() {
             loginUserWithCredentials(this.username, this.password);
         }
         
         addToolkitUserMarker() {
-            createMarker("toolkit");
+            createMarker("toolkit", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
         addRadiologyUserMarker() {
-            createMarker("radiology");
+            createMarker("radiology", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
         addEventUserMarker() {
-            createMarker("event");
+            createMarker("event", this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
         addEhrUserMarker() {
-            createMarker("ehr");
+            createMarker("ehr", this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
         valChanged(){
-            names = this.markerName;
-            location = this.location;
-            latitude = this.latitude;
-            longitude = this.longitude;
-            email = this.email;
-            phone = this.phone;
-            version = this.version;
-            encounters = this.encounters;
+            console.log(this.title);
+            console.log(this.location);
+            console.log(this.version);
+            console.log(this.email);
         }
       
     }
@@ -129,15 +125,15 @@
                 loggedIn = true;
                 console.log("Logged in to atlas db");
                 console.log(loggedIn);
-                console.log(this.markerName);
+                console.log(this.title);
                 console.log(this.version);
                 console.log(this.location);
             });
         }
         
-        function createMarker(type) {
+        function createMarker(type, name, location, latitude, longitude, email, phone, version, encounters) {
             if(loggedIn){
-                console.log(names);
+                console.log(this.title);
                 console.log(this.version);
                 console.log(this.location);
                 if(type == "event") {
