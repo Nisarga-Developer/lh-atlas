@@ -84,26 +84,23 @@
         }
         
         addToolkitUserMarker() {
-            createMarker("toolkit", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
+            createMarker("toolkit");
         }
         
         addRadiologyUserMarker() {
-            createMarker("radiology", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
+            createMarker("radiology");
         }
         
         addEventUserMarker() {
-            createMarker("event", this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
+            createMarker("event");
         }
         
         addEhrUserMarker() {
-            createMarker("ehr", this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
+            createMarker("ehr");
         }
         
         valChanged(){
-            console.log(this.title);
-            console.log(this.location);
-            console.log(this.version);
-            console.log(this.email);
+            changed(this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
       
     }
@@ -113,7 +110,17 @@
     
     <script>
         var loggedIn = false;
+        var title, location, latitude, longitude, email, phone, version, encounters;
         
+        function changed(titleF, locationF, latitudeF, longitudeF, emailF, phoneF, versionF, encountersF){
+            title = titleF;
+            location = locationF;
+            latitude = latitudeF;
+            email = emailF;
+            phone = phoneF;
+            version = versionF;
+            encounters = encountersF;
+        }
         function loginUserWithCredentials(user,pass) {
             firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error) {
                 var errorCode = error.code;
@@ -131,22 +138,18 @@
             });
         }
         
-        function createMarker(type, title, location, latitude, longitude, email, phone, version, encounters) {
+        function createMarker(type) {
             if(loggedIn){
-                console.log(this.title);
-                console.log(this.version);
-                console.log(this.location);
                 if(type == "event") {
-                    firebase.database().ref('lh-atlas/' + toString(title)).set({
+                    firebase.database().ref('lh-atlas/' + title).set({
                         type: type,
                         location: location,
                         coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
                         name: name,
                         lastUpdated: Date()
                     });
-                    alert("DONE");
                 } else {
-                    firebase.database().ref('lh-atlas/' + toString(title)).set({
+                    firebase.database().ref('lh-atlas/' + title).set({
                         type: type,
                         location: location,
                         coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
@@ -157,11 +160,8 @@
                         encounters: encounters,
                         lastUpdated: Date()
                     });
-                    alert("DONEEHR");
                 }
-                console.log("RUN< BUT NO");
             }
-            console.log('RUN');
         }
     </script>
 
