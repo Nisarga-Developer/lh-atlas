@@ -60,6 +60,9 @@
             version: {
                 type: String
             },
+            status: {
+                type: Boolean
+            }
         }
       }
       constructor() {
@@ -69,7 +72,7 @@
         
         
         loginUser() {
-            var status = loginUserWithCredentials(this.username, this.password);
+            status = loginUserWithCredentials(this.username, this.password);
             return status;
         }
         
