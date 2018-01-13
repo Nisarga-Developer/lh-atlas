@@ -85,32 +85,31 @@
                 value: "def",
                 reflectToAttribute: true
             }
-        }
-      }
-      constructor() {
-        super();
-      }
-        
-        
-        
-        loginUser() {
-            firebase.auth().signInWithEmailAndPassword(this.user,this.pass).catch(function(error) {
+        },
+            loginUser: function() {
+               firebase.auth().signInWithEmailAndPassword(this.user,this.pass).catch(function(error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 console.log(errorCode);
                 console.log(errorMessage);
                 console.log("Failed to log in to atlas db");
             }).then(function(){
-                console.log(email);
-                console.log(title);
+                console.log(this.email);
+                console.log(this.title);
                 this.loggedIn = 1;
                 console.log("Logged in to atlas db");
                 console.log(this.loggedIn);
                 console.log(this.title);
                 console.log(this.version);
                 console.log(this.email);
-            });
-        }
+            }); 
+            }
+      }
+      constructor() {
+        super();
+      }
+        
+        
         
         addToolkitUserMarker() {
             createMarker("toolkit");
