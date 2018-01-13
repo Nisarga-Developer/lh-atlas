@@ -100,7 +100,7 @@
         }
         
         valChanged(){
-            changed(this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
+            varUpdater(this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
       
     }
@@ -112,7 +112,7 @@
         var loggedIn = false;
         var title, location, latitude, longitude, email, phone, version, encounters;
         
-        function changed(titleF, locationF, latitudeF, longitudeF, emailF, phoneF, versionF, encountersF){
+        function varUpdater(titleF, locationF, latitudeF, longitudeF, emailF, phoneF, versionF, encountersF) {
             title = titleF;
             location = locationF;
             latitude = latitudeF;
@@ -121,6 +121,7 @@
             version = versionF;
             encounters = encountersF;
         }
+        
         function loginUserWithCredentials(user,pass) {
             firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error) {
                 var errorCode = error.code;
