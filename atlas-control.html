@@ -137,7 +137,7 @@
                 console.log(this.version);
                 console.log(this.location);
                 if(type == "event") {
-                    firebase.database().ref('lh-atlas/' + this.title).set({
+                    firebase.database().ref('lh-atlas/' + toString(title)).set({
                         type: type,
                         location: location,
                         coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
@@ -146,7 +146,7 @@
                     });
                     alert("DONE");
                 } else {
-                    firebase.database().ref('lh-atlas/' + this.title).set({
+                    firebase.database().ref('lh-atlas/' + toString(title)).set({
                         type: type,
                         location: location,
                         coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
