@@ -16,18 +16,6 @@
                 messagingSenderId: "492740598517"
             };
             firebase.initializeApp(config);
-            
-            var title, location, latitude, longitude, email, phone, version, encounters;
-        
-        function varUpdater(titleF, locationF, latitudeF, longitudeF, emailF, phoneF, versionF, encountersF) {
-            title = titleF;
-            location = locationF;
-            latitude = latitudeF;
-            email = emailF;
-            phone = phoneF;
-            version = versionF;
-            encounters = encountersF;
-        }
       </script>
 
   <template>
@@ -45,43 +33,33 @@
         return {
             username: {
                 type: String,
-                observer: "valChanged"
             },
             password: {
                 type: String,
-                observer: "valChanged"
             },
             title: {
                 type: String,
-                observer: "valChanged"
             },
             email: {
                 type: String,
-                observer: "valChanged"
             },
             phone: {
                 type: String,
-                observer: "valChanged"
             },
             latitude: {
                 type: Number,
-                observer: "valChanged"
             },
             longitude: {
                 type: Number,
-                observer: "valChanged"
             },
             location: {
                 type: String,
-                observer: "valChanged"
             },
             encounters: {
                 type: String,
-                observer: "valChanged"
             },
             version: {
                 type: String,
-                observer: "valChanged"
             }
         }
       }
@@ -109,10 +87,6 @@
         
         addEhrUserMarker() {
             createMarker("ehr");
-        }
-        
-        valChanged(){
-            varUpdater(this.title, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
       
     }
@@ -144,23 +118,23 @@
         function createMarker(type) {
             if(loggedIn){
                 if(type == "event") {
-                    firebase.database().ref('lh-atlas/' + title).set({
-                        type: type,
-                        location: location,
-                        coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
-                        name: name,
+                    firebase.database().ref('lh-atlas/' + this.title).set({
+                        type: this.type,
+                        location: this.location,
+                        coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
+                        name: this.title,
                         lastUpdated: Date()
                     });
                 } else {
-                    firebase.database().ref('lh-atlas/' + title).set({
-                        type: type,
-                        location: location,
-                        coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
-                        contactEmail: email,
-                        contactPhone: phone,
-                        version: version,
+                    firebase.database().ref('lh-atlas/' + this.title).set({
+                        type: this.type,
+                        location: this.location,
+                        coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
+                        contactEmail: this.email,
+                        contactPhone: this.phone,
+                        version: this.version,
                         name: this.title,
-                        encounters: encounters,
+                        encounters: this.encounters,
                         lastUpdated: Date()
                     });
                 }
