@@ -61,7 +61,6 @@
             version: {
                 type: String,
             },
-            
             loggedIn: {
                 type: Boolean,
             }
@@ -81,9 +80,9 @@
                 console.log(errorMessage);
                 console.log("Failed to log in to atlas db");
             }).then(function(){
-                loggedIn = true;
+                this.loggedIn = true;
                 console.log("Logged in to atlas db");
-                console.log(loggedIn);
+                console.log(this.loggedIn);
                 console.log(this.title);
                 console.log(this.version);
                 console.log(this.location);
@@ -107,7 +106,7 @@
         }
         
         createMarker(type) {
-            if(loggedIn){
+            if(this.loggedIn){
                 if(type == "event") {
                     firebase.database().ref('lh-atlas/' + this.title).set({
                         type: this.type,
