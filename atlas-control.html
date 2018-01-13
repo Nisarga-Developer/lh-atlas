@@ -95,6 +95,8 @@
   </script>
     
     <script>
+        var loggedIn = false;
+        
         function loginUserWithCredentials(user,pass) {
             firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error) {
                 var errorCode = error.code;
@@ -103,31 +105,34 @@
                 console.log(errorMessage);
                 return false;
             }).then(function(){
+                loggedIn = true;
                 return true;
             });
         }
         
         function createMarker(type) {
-            if(type == "event") {
-                firebase.database().ref('lh-atlas/' + this.markerName).set({
-                    type: type,
-                    location: this.location,
-                    coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
-                    name: this.name,
-                    lastUpdated: Date()
-                });
-            } else {
-                firebase.database().ref('lh-atlas/' + this.markerName).set({
-                    type: type,
-                    location: this.location,
-                    coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
-                    contactEmail: this.email,
-                    contactPhone: this.phone,
-                    version: this.version,
-                    name: this.name,
-                    encounters: this.encounters,
-                    lastUpdated: Date()
-                });
+            if(loggedIn){
+                if(type == "event") {
+                    firebase.database().ref('lh-atlas/' + this.markerName).set({
+                        type: type,
+                        location: this.location,
+                        coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
+                        name: this.name,
+                        lastUpdated: Date()
+                    });
+                } else {
+                    firebase.database().ref('lh-atlas/' + this.markerName).set({
+                        type: type,
+                        location: this.location,
+                        coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
+                        contactEmail: this.email,
+                        contactPhone: this.phone,
+                        version: this.version,
+                        name: this.name,
+                        encounters: this.encounters,
+                        lastUpdated: Date()
+                    });
+                }
             }
         }
     </script>
