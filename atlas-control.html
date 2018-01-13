@@ -115,6 +115,9 @@
         
         function createMarker(type, name, location, latitude, longitude, email, phone, version, encounters) {
             if(loggedIn){
+                console.log(this.markerName);
+                console.log(this.version);
+                console.log(this.location);
                 if(type == "event") {
                     firebase.database().ref('lh-atlas/' + name).set({
                         type: type,
