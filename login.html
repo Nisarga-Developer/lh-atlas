@@ -31,7 +31,8 @@
             <input type="text" placeholder="Encounters as JSON" id="encounters"><br><br>
             <input type="text" placeholder="Name" id="name"><br><br>
             <input type="text" placeholder="Version" id="version"><br><br>
-            <button id="submit">CREATE MARKER</button>
+            <input type="text" placeholder="Location" id="location"><br><br>
+            <button id="submit" onclick="submit()">CREATE MARKER</button>
         </div>
         <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
 
@@ -60,6 +61,29 @@
                     document.getElementsByClassName("main")[0].style.display = "none";
                     document.getElementsByClassName("new_marker")[0].style.display = "block";
                     
+                });
+            }
+            
+            function submit() {
+                
+                var name = document.getElementById("name").value;
+                var type = document.getElementById("type").value;
+                var location = document.getElementById("location").value;
+                var coords = '{ "lat": "' + document.getElementById("lat").value + '", "lng": "' + document.getElementById("lng").value + '"}';
+                var contactEmail = document.getElementById("contactEmail").value;
+                var contactPhone = document.getElementById("contactPhone").value;
+                var version = document.getElementById("version").value;
+                var encounters = document.getElementById("encounters").value;
+                firebase.database().ref('lh-atlas/' + name).set({
+                    type: type,
+                    location: location,
+                    coords: coords,
+                    contactEmail: contactEmail,
+                    contactPhone: contactPhone,
+                    version: version,
+                    name: name,
+                    encounters: encounters,
+                    lastUpdated: Date()
                 });
             }
 </script>
