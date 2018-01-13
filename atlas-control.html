@@ -131,13 +131,13 @@
             });
         }
         
-        function createMarker(type, name, location, latitude, longitude, email, phone, version, encounters) {
+        function createMarker(type, title, location, latitude, longitude, email, phone, version, encounters) {
             if(loggedIn){
                 console.log(this.title);
                 console.log(this.version);
                 console.log(this.location);
                 if(type == "event") {
-                    firebase.database().ref('lh-atlas/' + name).set({
+                    firebase.database().ref('lh-atlas/' + this.title).set({
                         type: type,
                         location: location,
                         coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
@@ -146,7 +146,7 @@
                     });
                     alert("DONE");
                 } else {
-                    firebase.database().ref('lh-atlas/' + name).set({
+                    firebase.database().ref('lh-atlas/' + this.title).set({
                         type: type,
                         location: location,
                         coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
