@@ -4,18 +4,34 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700,900" rel="stylesheet">
     
     <head>
-    
+        <style>
+            .new_marker {
+                display: none;
+            }
+        </style>
     </head>
     
     <body>
         <div class="main">
             <p>Login to add an entry</p>
-            <p>Username</p><input type="text" id="user">
+            <p id="labelA">Username</p><input type="text" id="user">
             <br>
             <p>Password</p><input type="text" id="pass">
             <br>
             <br>
             <button onclick="login()">LOGIN</button>
+        </div>
+        
+        <div class="new_marker">
+            <input type="text" placeholder="Type" id="type"><br><br>
+            <input type="text" placeholder="Email" id="contactEmail"><br><br>
+            <input type="text" placeholder="Phone" id="contactPhone"><br><br>
+            <input type="text" placeholder="Latitude" id="lat"><br><br>
+            <input type="text" placeholder="Longitude" id="lng"><br><br>
+            <input type="text" placeholder="Encounters as JSON" id="encounters"><br><br>
+            <input type="text" placeholder="Name" id="name"><br><br>
+            <input type="text" placeholder="Version" id="version"><br><br>
+            <button id="submit">CREATE MARKER</button>
         </div>
         <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
 
@@ -41,7 +57,9 @@
                     console.log(errorMessage);
                     // ...
                 }).then(function(){
-                    document.getElementById("")        
+                    document.getElementsByClassName("main")[0].style.display = "none";
+                    document.getElementsByClassName("new_marker")[0].style.display = "block";
+                    
                 });
             }
 </script>
