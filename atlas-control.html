@@ -32,34 +32,44 @@
       static get properties() {
         return {
             username: {
-                type: String
+                type: String,
+                observer: "valChanged"
             },
             password: {
-                type: String
+                type: String,
+                observer: "valChanged"
             },
             markerName: {
-                type: String
+                type: String,
+                observer: "valChanged"
             },
             email: {
-                type: String
+                type: String,
+                observer: "valChanged"
             },
             phone: {
-                type: String
+                type: String,
+                observer: "valChanged"
             },
             latitude: {
-                type: Number
+                type: Number,
+                observer: "valChanged"
             },
             longitude: {
-                type: Number
+                type: Number,
+                observer: "valChanged"
             },
             location: {
-                type: String
+                type: String,
+                observer: "valChanged"
             },
             encounters: {
-                type: String
+                type: String,
+                observer: "valChanged"
             },
             version: {
-                type: String
+                type: String,
+                observer: "valChanged"
             }
         }
       }
@@ -88,6 +98,8 @@
         addEhrUserMarker() {
             createMarker("ehr", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
+        
+        valChanged(){;}
       
     }
       
