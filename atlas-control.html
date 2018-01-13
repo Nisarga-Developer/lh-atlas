@@ -62,7 +62,7 @@
                 type: String,
             },
             loggedIn: {
-                type: Boolean,
+                type: Number,
             }
         }
       }
@@ -79,8 +79,9 @@
                 console.log(errorCode);
                 console.log(errorMessage);
                 console.log("Failed to log in to atlas db");
+                this.loggedIn = 0;
             }).then(function(){
-                this.loggedIn = true;
+                this.loggedIn = 1;
                 console.log("Logged in to atlas db");
                 console.log(this.loggedIn);
                 console.log(this.title);
