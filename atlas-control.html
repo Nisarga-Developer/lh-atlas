@@ -31,38 +31,38 @@
     
       static get properties() {
         return {
-            username: {
-                type: String
+            user: {
+                type: String,
             },
-            password: {
-                type: String
+            pass: {
+                type: String,
             },
             title: {
-                type: String
+                type: String,
             },
             email: {
-                type: String
+                type: String,
             },
             phone: {
-                type: String
+                type: String,
             },
             latitude: {
-                type: Number
+                type: Number,
             },
             longitude: {
-                type: Number
+                type: Number,
             },
             location: {
-                type: String
+                type: String,
             },
             encounters: {
-                type: String
+                type: String,
             },
             version: {
-                type: String
+                type: String,
             },
             loggedIn: {
-                type: Number
+                type: Boolean,
             }
         }
       }
@@ -79,9 +79,8 @@
                 console.log(errorCode);
                 console.log(errorMessage);
                 console.log("Failed to log in to atlas db");
-                this.title = "AA";
             }).then(function(){
-                this.title = "NAMAMAMAE";
+                this.loggedIn = true;
                 console.log("Logged in to atlas db");
                 console.log(this.loggedIn);
                 console.log(this.title);
