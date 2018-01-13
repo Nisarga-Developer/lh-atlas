@@ -119,6 +119,7 @@
                         name: name,
                         lastUpdated: Date()
                     });
+                    alert("DONE");
                 } else {
                     firebase.database().ref('lh-atlas/' + name).set({
                         type: type,
@@ -131,6 +132,7 @@
                         encounters: encounters,
                         lastUpdated: Date()
                     });
+                    alert("DONEEHR");
                 }
             }
         }
