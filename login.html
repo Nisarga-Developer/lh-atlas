@@ -69,11 +69,15 @@
                 var name = document.getElementById("name").value;
                 var type = document.getElementById("type").value;
                 var location = document.getElementById("location").value;
-                var coords = '{ "lat":' + parseInt(document.getElementById("lat").value) + ', "lng":' + parseInt(document.getElementById("lng").value) + '}';
+                var coords = '{ "lat":' + (document.getElementById("lat").value) + ', "lng":' + (document.getElementById("lng").value) + '}';
                 var contactEmail = document.getElementById("contactEmail").value;
                 var contactPhone = document.getElementById("contactPhone").value;
                 var version = document.getElementById("version").value;
                 var encounters = document.getElementById("encounters").value;
+                
+                if(encounters == "") {
+                    encounters = "[]";
+                }
                 firebase.database().ref('lh-atlas/' + name).set({
                     type: type,
                     location: location,

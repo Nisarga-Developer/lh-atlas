@@ -1,0 +1,35 @@
+<html>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700,900" rel="stylesheet">
+    <script src="https://use.fontawesome.com/6ce1697ef4.js"></script>
+     <link rel="import" href="atlas-control.html">
+    <head>
+        
+    </head>
+    <body>
+        <atlas-control
+                       username="Superuser@super.com"
+                       password="password"
+                
+                       name="Cindy Melon"
+                       email="cindy@melon.com"
+                       phone="(+1)992-813-1907"
+                       latitude="-22.351"
+                       longitude="161.044"
+                       location="Australia"
+                       encounters="[]"
+                       version="2.2 alpha"
+                       
+                       id="atlas-control"
+                       ></atlas-control>
+        
+        <script>
+            var i = document.getElementById("atlas-control").loginUser();
+            alert(i);
+            document.getElementById("atlas-control").addToolkitUserMarker();
+        </script>
+    </body>
+</html>
