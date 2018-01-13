@@ -60,6 +60,10 @@
             },
             version: {
                 type: String,
+            },
+            
+            loggedIn: {
+                type: Boolean,
             }
         }
       }
@@ -70,7 +74,20 @@
         
         
         loginUser() {
-            loginUserWithCredentials(this.username, this.password);
+            firebase.auth().signInWithEmailAndPassword(this.username,this.password).catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorCode);
+                console.log(errorMessage);
+                console.log("Failed to log in to atlas db");
+            }).then(function(){
+                loggedIn = true;
+                console.log("Logged in to atlas db");
+                console.log(loggedIn);
+                console.log(this.title);
+                console.log(this.version);
+                console.log(this.location);
+            });
         }
         
         addToolkitUserMarker() {
@@ -88,34 +105,8 @@
         addEhrUserMarker() {
             createMarker("ehr");
         }
-      
-    }
-      
-    customElements.define(PatientDemographics.is, PatientDemographics);
-  </script>
-    
-    <script>
-        var loggedIn = false;
         
-        
-        function loginUserWithCredentials(user,pass) {
-            firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log(errorCode);
-                console.log(errorMessage);
-                console.log("Failed to log in to atlas db");
-            }).then(function(){
-                loggedIn = true;
-                console.log("Logged in to atlas db");
-                console.log(loggedIn);
-                console.log(this.title);
-                console.log(this.version);
-                console.log(this.location);
-            });
-        }
-        
-        function createMarker(type) {
+        createMarker(type) {
             if(loggedIn){
                 if(type == "event") {
                     firebase.database().ref('lh-atlas/' + this.title).set({
@@ -140,6 +131,14 @@
                 }
             }
         }
+      
+    }
+      
+    customElements.define(PatientDemographics.is, PatientDemographics);
+  </script>
+    
+    <script>
+        
     </script>
 
 </dom-module>
