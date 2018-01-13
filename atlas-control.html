@@ -33,36 +33,47 @@
         return {
             user: {
                 type: String,
+                value: "def"
             },
             pass: {
                 type: String,
+                value: "def"
             },
             title: {
                 type: String,
+                value: "def"
             },
             email: {
                 type: String,
+                value: "def"
             },
             phone: {
                 type: String,
+                value: "def"
             },
             latitude: {
                 type: Number,
+                value: 0
             },
             longitude: {
                 type: Number,
+                value: 0
             },
             location: {
                 type: String,
+                value: "def"
             },
             encounters: {
                 type: String,
+                value: "def"
             },
             version: {
                 type: String,
+                value: "def"
             },
             loggedIn: {
-                type: Boolean,
+                type: Number,
+                value: 0
             }
         }
       }
@@ -80,7 +91,7 @@
                 console.log(errorMessage);
                 console.log("Failed to log in to atlas db");
             }).then(function(){
-                this.loggedIn = true;
+                this.loggedIn = 1;
                 console.log("Logged in to atlas db");
                 console.log(this.loggedIn);
                 console.log(this.title);
