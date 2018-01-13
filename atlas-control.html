@@ -36,7 +36,7 @@
             password: {
                 type: String
             },
-            name: {
+            markerName: {
                 type: String
             },
             email: {
@@ -109,7 +109,7 @@
         
         function createMarker(type) {
             if(type == "event") {
-                firebase.database().ref('lh-atlas/' + this.name).set({
+                firebase.database().ref('lh-atlas/' + this.markerName).set({
                     type: type,
                     location: this.location,
                     coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
@@ -117,7 +117,7 @@
                     lastUpdated: Date()
                 });
             } else {
-                firebase.database().ref('lh-atlas/' + this.name).set({
+                firebase.database().ref('lh-atlas/' + this.markerName).set({
                     type: type,
                     location: this.location,
                     coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
