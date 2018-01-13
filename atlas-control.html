@@ -1,0 +1,135 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="https://polygit.org/polymer+v2.0.0/shadycss+webcomponents+1.0.0/components/iron-ajax/iron-ajax.html">
+<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyDRxNTvFO62jOQTxG5Th8-AN81xmUc7pAo",
+                authDomain: "extensions-3caad.firebaseapp.com",
+                databaseURL: "https://extensions-3caad.firebaseio.com",
+                projectId: "extensions-3caad",
+                storageBucket: "extensions-3caad.appspot.com",
+                messagingSenderId: "492740598517"
+            };
+            firebase.initializeApp(config);
+      </script>
+<dom-module id="atlas-control">
+
+  <template>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      
+  </template>
+
+  <script>
+    class PatientDemographics extends Polymer.Element {
+      static get is() {
+          return 'atlas-control';
+      }
+    
+      static get properties() {
+        return {
+            username: {
+                type: String
+            },
+            password: {
+                type: String
+            },
+            name: {
+                type: String
+            },
+            email: {
+                type: String
+            },
+            phone: {
+                type: String
+            },
+            latitude: {
+                type: Number
+            },
+            longitude: {
+                type: Number
+            },
+            location: {
+                type: String
+            },
+            encounters: {
+                type: String
+            },
+            version: {
+                type: String
+            },
+        }
+      }
+      constructor() {
+        super();
+      }
+        
+        
+        
+        loginUser() {
+            var status = loginUserWithCredentials(this.username, this.password);
+            return status;
+        }
+        
+        addToolkitUserMarker() {
+            createMarker("toolkit");
+        }
+        
+        addRadiologyUserMarker() {
+            createMarker("radiology");
+        }
+        
+        addEventUserMarker() {
+            createMarker("event");
+        }
+        
+        addEhrUserMarker() {
+            createMarker("ehr");
+        }
+      
+    }
+      
+    customElements.define(PatientDemographics.is, PatientDemographics);
+  </script>
+    
+    <script>
+        function loginUserWithCredentials(user,pass) {
+            firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorCode);
+                console.log(errorMessage);
+                return false;
+            }).then(function(){
+                return true;
+            });
+        }
+        
+        function createMarker(type) {
+            if(type == "event") {
+                firebase.database().ref('lh-atlas/' + this.name).set({
+                    type: type,
+                    location: this.location,
+                    coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
+                    name: this.name,
+                    lastUpdated: Date()
+                });
+            } else {
+                firebase.database().ref('lh-atlas/' + this.name).set({
+                    type: type,
+                    location: this.location,
+                    coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
+                    contactEmail: this.email,
+                    contactPhone: this.phone,
+                    version: this.version,
+                    name: this.name,
+                    encounters: this.encounters,
+                    lastUpdated: Date()
+                });
+            }
+        }
+    </script>
+
+</dom-module>
