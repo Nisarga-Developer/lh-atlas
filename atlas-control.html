@@ -73,22 +73,22 @@
         }
         
         addToolkitUserMarker() {
-            createMarker("toolkit");
+            createMarker("toolkit", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
         addRadiologyUserMarker() {
-            createMarker("radiology");
+            createMarker("radiology", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
         addEventUserMarker() {
-            createMarker("event");
+            createMarker("event", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
         addEhrUserMarker() {
-            createMarker("ehr");
+            createMarker("ehr", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
       
-    }
+    }(type, name, location, latitude, longitude, email, phone, version, encounters) {
       
     customElements.define(PatientDemographics.is, PatientDemographics);
   </script>
@@ -109,26 +109,26 @@
             });
         }
         
-        function createMarker(type) {
+        function createMarker(type, name, location, latitude, longitude, email, phone, version, encounters) {
             if(loggedIn){
                 if(type == "event") {
-                    firebase.database().ref('lh-atlas/' + this.markerName).set({
+                    firebase.database().ref('lh-atlas/' + name).set({
                         type: type,
-                        location: this.location,
-                        coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
-                        name: this.name,
+                        location: location,
+                        coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
+                        name: name,
                         lastUpdated: Date()
                     });
                 } else {
-                    firebase.database().ref('lh-atlas/' + this.markerName).set({
+                    firebase.database().ref('lh-atlas/' + name).set({
                         type: type,
-                        location: this.location,
-                        coords: '{ "lat":' + this.latitude + ', "lng":' + this.longitude + '}',
-                        contactEmail: this.email,
-                        contactPhone: this.phone,
-                        version: this.version,
-                        name: this.name,
-                        encounters: this.encounters,
+                        location: location,
+                        coords: '{ "lat":' + latitude + ', "lng":' + longitude + '}',
+                        contactEmail: email,
+                        contactPhone: phone,
+                        version: version,
+                        name: name,
+                        encounters: encounters,
                         lastUpdated: Date()
                     });
                 }
