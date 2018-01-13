@@ -99,7 +99,12 @@
             createMarker("ehr", this.markerName, this.location, this.latitude, this.longitude, this.email, this.phone, this.version, this.encounters);
         }
         
-        valChanged(){console.log("A");}
+        valChanged(){
+            console.log(this.markerName);
+            console.log(this.location);
+            console.log(this.version);
+            console.log(this.longitude);
+        }
       
     }
       
