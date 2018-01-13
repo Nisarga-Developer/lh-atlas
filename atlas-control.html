@@ -100,7 +100,7 @@
         }
         
         valChanged(){
-            name = this.markerName;
+            names = this.markerName;
             location = this.location;
             latitude = this.latitude;
             longitude = this.longitude;
@@ -137,7 +137,7 @@
         
         function createMarker(type) {
             if(loggedIn){
-                console.log(name);
+                console.log(names);
                 console.log(this.version);
                 console.log(this.location);
                 if(type == "event") {
