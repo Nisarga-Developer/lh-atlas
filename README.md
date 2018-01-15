@@ -6,11 +6,11 @@ The Atlas is built using the Google Maps JavaScript API, and the backend is temp
 
 ## Using the Atlas
 
-A demo of the Atlas is available at: https://vishwas-adiga.github.io/lh-atlas/demo.html
+A demo of the Atlas is available at: https://vishwas-adiga.github.io/lh-atlas/index.html
 
 To run the project locally, clone/download the repo and open demo.html in any browser with JavaScript enabled.
 
-Alternatively, to embed the Atlas into a page, use ```<iframe src="https://vishwas-adiga.github.io/lh-atlas/demo.html"></iframe>```
+Alternatively, to embed the Atlas into a page, use ```<iframe src="https://vishwas-adiga.github.io/lh-atlas/index.html"></iframe>```
 
 ## Adding markers
 Go to https://vishwas-adiga.github.io/lh-atlas/logjn.html, and sign in using *Superuser@super.com* and *password*.
