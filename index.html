@@ -1,0 +1,282 @@
+<html>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,700,900" rel="stylesheet">
+    
+    <link type="text/css" href="Assets/styles.css" rel="stylesheet">
+    <script src="Assets/scripts.js" type="text/javascript"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+        
+    <head>
+        <title>LibreHealth Atlas</title>
+    </head>
+        
+    <body>
+        <!--Top navbar -->
+        <div class="nav-wrapper">
+            <a href="index.html"><img src="Assets/logo.png" class="brand-logo"></a>
+            <ul id="nav-mobile" class="right hide-on-small-only">
+                <li class="menu_items_li" onclick="toggleLegend()"><a class="menu_items tooltipped" data-position="bottom" data-delay="50" data-    tooltip="View legend"><i class="material-icons">info</i></a></li>
+                <li class="menu_items_li"><a class="menu_items tooltipped" data-position="bottom" data-delay="50" data-tooltip="Help"><i    class="material-icons">help</i></a></li>
+                <li class="menu_items_li"><a class="menu_items"><i class="material-icons dropdown-button" data-activates='dropdown1'>more_vert</i>  </a></li>
+            </ul>
+        </div>
+        
+        <!-- Legend box -->
+        <div id="legend">
+            <h1>Legend</h1>
+            <p><img src="Assets/ehr.png">&nbsp;LibreHealth EHR</p>
+            <p><img src="Assets/toolkit.png">&nbsp;LibreHealth Toolkit</p>
+            <p><img src="Assets/radiology.png">&nbsp;LibreHealth Radiology</p>
+            <p><img src="Assets/event.png">&nbsp;Events</p>
+        </div>
+        
+        <!-- Map component -->
+        <div id="map"></div>
+        
+        
+        <!-- Modal -->
+        <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a>
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4 id="type">Type</h4>
+                <p id="name">Name</p>
+                <div class="encounters">
+                    <p id="encounters_title">Previous encounters</p>
+                    <div class="encounters_wrapper">
+                    </div>
+                    <p id="encounters_none"><i class="material-icons">sentiment_neutral</i><br>No past encounters</p>
+                </div>
+                
+                <p id="email"><i class="material-icons">mail_outline</i>blah@blah.com</p>
+                <p id="phone"><i class="material-icons">phone</i>000-932-2039</p>
+                <p id="desc"></p>
+                <p id="version">Using version</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect btn-flat">CLOSE</a>
+            </div>
+        </div>
+        
+
+        <!-- Dropdown -->
+        <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="login.html">Download all data as JSON</a></li>
+            <li><a href="#!">Search</a></li>
+        </ul>
+        
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyDRxNTvFO62jOQTxG5Th8-AN81xmUc7pAo",
+                authDomain: "extensions-3caad.firebaseapp.com",
+                databaseURL: "https://extensions-3caad.firebaseio.com",
+                projectId: "extensions-3caad",
+                storageBucket: "extensions-3caad.appspot.com",
+                messagingSenderId: "492740598517"
+            };
+            firebase.initializeApp(config);
+        </script>
+        
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtWx6OHj2oMjdktQr8RZgkT5znkwziASM&callback=initMap">
+        </script>
+        
+        <script>
+            // Function to toggle legend visibility
+            var legendVisible = false;
+            function toggleLegend() {
+                if(legendVisible) {
+                    document.getElementById("legend").style.display = "none";
+                    legendVisible = false;
+                } else {
+                    document.getElementById("legend").style.display = "block";
+                    legendVisible = true;
+                }
+            }
+            
+            // Firebase get data
+            var database = firebase.database();
+            
+            $(document).ready(function(){
+                $('.modal').modal();
+                $('.dropdown-button').dropdown({
+                    inDuration: 300,
+                    outDuration: 225,
+                    constrainWidth: false, // Does not change width of dropdown to that of the activator
+                    hover: false, // Activate on hover
+                    gutter: 0, // Spacing from edge
+                    belowOrigin: true, // Displays dropdown below the button
+                    alignment: 'left', // Displays dropdown with edge aligned to the left of button
+                    stopPropagation: false // Stops event propagation
+                });
+            });
+            
+            // Function to generate the modal
+            function moreDetails(name) {
+                firebase.database().ref('lh-atlas/' + name).once('value').then(function(snapshot) {  
+                        // EHR User
+                        if(snapshot.val().type == "ehr") {
+                            
+                            document.getElementById("email").style.display = "block";
+                            document.getElementById("phone").style.display = "block";
+                            document.getElementsByClassName("encounters")[0].style.display = "block";
+                            document.getElementById("desc").style.display = "none";
+                            
+                            //type of data
+                            document.getElementById("type").innerHTML = "EHR User";
+                            document.getElementById("type").style.color = "#219653";
+                            
+                            //name of user
+                            document.getElementById("name").innerHTML = snapshot.val().name;
+                            
+                            //adding encounters
+                            while ((document.getElementsByClassName("encounters_wrapper")[0].firstChild)) {
+                                document.getElementsByClassName("encounters_wrapper")[0].removeChild(document.getElementsByClassName("encounters_wrapper")[0].firstChild);
+                            }
+                            
+                            if((snapshot.val().encounters).length == 0) {
+                                document.getElementById("encounters_title").style.display = "none";
+                            } else {
+                                
+                                var encounters = JSON.parse(snapshot.val().encounters);
+                                document.getElementById("encounters_title").style.display = "block";
+                                
+                                for(var i=0;i< encounters.length; i++) {
+                                    var item = document.createElement("P");
+                                    item.setAttribute("class", "encounters_item");
+                                    
+                                    var text = document.createTextNode(encounters[i].name + " on " + encounters[i].date);
+                                    item.appendChild(text);
+                                    document.getElementsByClassName("encounters_wrapper")[0].appendChild(item);
+                                    
+                                    document.getElementById("encounters_none").style.display = "none";
+                                    
+                                }
+                            }
+                            
+                            document.getElementById("email").innerHTML = "<i class=\"material-icons\">mail_outline</i>&nbsp;" + snapshot.val().contactEmail;
+                            
+                            document.getElementById("phone").innerHTML = "<i class=\"material-icons\">phone</i>&nbsp;" + snapshot.val().contactPhone;
+                            
+                            document.getElementById("version").innerHTML = "Using version " + snapshot.val().version + "<br>Last updated on " + snapshot.val().lastUpdated;
+                            
+                            // Toolkit user   
+                        } else if(snapshot.val().type == "toolkit") {
+                             
+                            document.getElementById("email").style.display = "block";
+                            document.getElementById("phone").style.display = "block";
+                            document.getElementsByClassName("encounters")[0].style.display = "block";
+                            document.getElementById("desc").style.display = "none";
+                            
+                            document.getElementById("type").innerHTML = "Toolkit User";
+                            document.getElementById("type").style.color = "#F2994A";
+                            
+                            //name of user
+                            document.getElementById("name").innerHTML = snapshot.val().name;
+                            
+                            //adding encounters
+                            while ((document.getElementsByClassName("encounters_wrapper")[0].firstChild)) {
+                                document.getElementsByClassName("encounters_wrapper")[0].removeChild(document.getElementsByClassName("encounters_wrapper")[0].firstChild);
+                            }
+                            
+                            if((snapshot.val().encounters).length == 0) {
+                                document.getElementById("encounters_title").style.display = "none";
+                            } else {
+                                
+                                var encounters = JSON.parse(snapshot.val().encounters);
+                                document.getElementById("encounters_title").style.display = "block";
+                                
+                                for(var i=0;i< encounters.length; i++) {
+                                    var item = document.createElement("P");
+                                    item.setAttribute("class", "encounters_item");
+                                    
+                                    var text = document.createTextNode(encounters[i].name + " on " + encounters[i].date);
+                                    item.appendChild(text);
+                                    document.getElementsByClassName("encounters_wrapper")[0].appendChild(item);
+                                    
+                                    document.getElementById("encounters_none").style.display = "none";
+                                    
+                                }
+                            }
+                            
+                            document.getElementById("email").innerHTML = "<i class=\"material-icons\">mail_outline</i>&nbsp;" + snapshot.val().contactEmail;
+                            
+                            document.getElementById("phone").innerHTML = "<i class=\"material-icons\">phone</i>&nbsp;" + snapshot.val().contactPhone;
+                            
+                            document.getElementById("version").innerHTML = "Using version " + snapshot.val().version + "<br>Last updated on " + snapshot.val().lastUpdated;
+                         
+                            // Radiology User
+                        } else if(snapshot.val().type == "radiology") {
+                            
+                            document.getElementById("email").style.display = "block";
+                            document.getElementById("phone").style.display = "block";
+                            document.getElementsByClassName("encounters")[0].style.display = "block";
+                            document.getElementById("desc").style.display = "none";
+                            
+                            document.getElementById("type").innerHTML = "Radiology User";
+                            document.getElementById("type").style.color = "#2F80ED";
+                            
+                            //name of user
+                            document.getElementById("name").innerHTML = snapshot.val().name;
+                            
+                            //adding encounters
+                            while ((document.getElementsByClassName("encounters_wrapper")[0].firstChild)) {
+                                document.getElementsByClassName("encounters_wrapper")[0].removeChild(document.getElementsByClassName("encounters_wrapper")[0].firstChild);
+                            }
+                            
+                            if((snapshot.val().encounters).length == 0) {
+                                document.getElementById("encounters_title").style.display = "none";
+                            } else {
+                                
+                                var encounters = JSON.parse(snapshot.val().encounters);
+                                document.getElementById("encounters_title").style.display = "block";
+                                
+                                for(var i=0;i< encounters.length; i++) {
+                                    var item = document.createElement("P");
+                                    item.setAttribute("class", "encounters_item");
+                                    
+                                    var text = document.createTextNode(encounters[i].name + " on " + encounters[i].date);
+                                    item.appendChild(text);
+                                    document.getElementsByClassName("encounters_wrapper")[0].appendChild(item);
+                                    
+                                    document.getElementById("encounters_none").style.display = "none";
+                                    
+                                }
+                            }
+                            
+                            document.getElementById("email").innerHTML = "<i class=\"material-icons\">mail_outline</i>&nbsp;" + snapshot.val().contactEmail;
+                            
+                            document.getElementById("phone").innerHTML = "<i class=\"material-icons\">phone</i>&nbsp;" + snapshot.val().contactPhone;
+                            
+                            document.getElementById("version").innerHTML = "Using version " + snapshot.val().version + "<br>Last updated on " + snapshot.val().lastUpdated;
+                            
+                            //Event data
+                        } else if(snapshot.val().type == "event") {
+                            
+                            document.getElementById("type").innerHTML = "Event";
+                            document.getElementById("type").style.color = "#CC0000";
+                            
+                            document.getElementById("name").innerHTML = snapshot.val().name;
+                                
+                            document.getElementsByClassName("encounters")[0].style.display = "none";
+                            document.getElementById("email").style.display = "none";
+                            document.getElementById("phone").style.display = "none";
+                            
+                            document.getElementById("desc").style.display = "block";
+                            document.getElementById("desc").innerHTML = snapshot.val().description;
+                            
+                            document.getElementById("version").innerHTML = "Last updated on " + snapshot.val().lastUpdated;
+                            
+                        }
+                       $('#modal1').modal('open');
+                });
+            }
+        </script>
+    </body>
+</html>

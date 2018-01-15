@@ -1,0 +1,173 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.nav-wrapper {
+    background-color: rgba(0,0,0,0.2);
+    height: 10vh;
+    position: fixed;
+    width: 100vw;
+    line-height: 10vh;
+    z-index: 10;
+    transition: background 0.2s;
+}
+
+.nav-wrapper .brand-logo {
+    filter: brightness(1000%);
+    height: 8vh;
+    margin-top: 1vh;
+    margin-left: 2vw;
+}
+
+.nav-wrapper .menu_items_li {
+    display: inline-block;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    border-radius: 3600px;
+    transition: background 0.2s;
+    transition: border 0.2s;
+    cursor: pointer;
+}
+
+.nav-wrapper li a i {
+    vertical-align: middle;
+}
+
+
+.nav-wrapper a {
+    color: #FFF;
+    font-size: 16px;
+}
+
+.nav-wrapper ul {
+    line-height: 5vh;
+}
+
+#map {
+    height: 100vh;
+    width: 100vw;
+}
+
+#legend {
+    width: 20vw;
+    height: 50vh;
+    position: absolute;
+    top: 30vh;
+    right: 4vw;
+    background-color: #FFF;
+    border-radius: 2px;
+    z-index: 100;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    padding: 3vw;
+    display: none;
+}
+
+#legend h1 {
+    margin: auto;
+    font-size: 24px;
+    color: #666;                
+}
+
+.content {
+    width: 400px;
+    height: 250px;
+    margin: 0;
+    padding: 20px;
+}
+
+.content .header {
+    width: 100%;
+    height: 50px;
+    padding: 0;
+    margin: 0;
+}
+
+.content .header .event, .content .header .ehr, .content .header .toolkit, .content .header .radiology  {
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+}
+
+.content .header .event {
+    color: #CC0000;
+}
+
+.content .header .ehr {
+    color: #219653;
+}
+
+.content .header .toolkit {
+    color: #F2994A;
+}
+
+.content .header .radiology {
+    color: #2F80ED;
+}
+
+.content .header .name {
+    font-size: 18px;
+    color: #666;
+}
+
+.content .header .version {
+    font-size: 12px;
+    color: #666;
+}
+
+.modal-content .encounters {
+    background-color: #EEE;
+    border-radius: 2px;
+    width: 80%;
+    height: 200px;
+    overflow-y: scroll;
+    padding: 20px;
+    padding-bottom: 0;
+}
+
+.modal-content #encounters_title {
+    font-size: 20px;
+    color: #666;
+    display: none;
+}
+
+.modal-content #encounters_item {
+    font-size: 16px;
+    color: #666;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+}
+
+.modal-content #encounters_none {
+    font-size: 20px;
+    color: #AAA;
+    text-align: center;
+    width: 100%;
+}
+
+.modal-content #name {
+    font-size: 20px;
+}
+
+.modal-content #email, .modal-content #phone {
+    font-size: 16px;
+    color: #999;
+}
+
+.modal-content #email i, .modal-content #phone i {
+    vertical-align: middle;
+}
+
+.modal-content #version {
+    font-size: 12px;
+    color: #AAA;
+}
+
+.modal-content #desc {
+    font-size: 15px;
+    color: #666;
+    display: none;
+}           
